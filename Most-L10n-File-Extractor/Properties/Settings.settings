@@ -1,0 +1,14 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="uri:settings" CurrentProfile="(Default)">
+  <Profiles>
+    <Profile Name="(Default)" />
+  </Profiles>
+  <Settings>
+    <Setting Name="MostKorabliPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\\Program Files\\Lesta\\Most Korabli</Value>
+    </Setting>
+    <Setting Name="MostModCachePath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\\ProgramData\\Lesta\\Most Korabli\\.Cache</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

@@ -1,0 +1,8 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="Release_zh_CN" />
+  </Configurations>
+  <Project Path="Korabli-Most-L10n-Hook/Korabli-Most-L10n-Hook.csproj" Id="ea8b4b91-5688-4cec-9b56-4908bf6d11ba" />
+  <Project Path="Tanki-Most-L10n-Hook/Tanki-Most-L10n-Hook.csproj" Id="4ddd3cd4-12df-4814-ae0f-d1995f170670" />
+</Solution>
