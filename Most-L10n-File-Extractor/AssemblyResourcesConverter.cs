@@ -347,7 +347,7 @@ public class AssemblyResourcesConverter
                 var outList = new List<object>();
                 foreach (var it in items)
                 {
-                    var composite = it.Key + "\u0000" + it.Value;
+                    var composite = string.Concat(it.Key, "\u0000", it.Value);
                     string translation = string.Empty;
                     if (existing.TryGetValue(composite, out var oldTrans)) translation = oldTrans;
                     outList.Add(new { key = it.Key, original = it.Value, translation = translation });
@@ -472,14 +472,14 @@ public class AssemblyResourcesConverter
                                                     var keyBase = itemName;
 
                                                     var keyName = keyBase + "_Name";
-                                                    var compName = keyName + "\u0000" + nameVal;
+                                                    var compName = string.Concat(keyName, "\u0000", nameVal);
                                                     var transName = string.Empty;
                                                     if (!string.IsNullOrEmpty(nameVal) && existingLoc.TryGetValue(compName, out var prev)) transName = prev;
                                                     entries.Add(new { key = keyName, original = nameVal, translation = transName });
                                                     result.ItemCount++;
 
                                                     var keyDesc = keyBase + "_Description";
-                                                    var compDesc = keyDesc + "\u0000" + descVal;
+                                                    var compDesc = string.Concat(keyDesc, "\u0000", descVal);
                                                     var transDesc = string.Empty;
                                                     if (!string.IsNullOrEmpty(descVal) && existingLoc.TryGetValue(compDesc, out var prevDesc)) transDesc = prevDesc;
                                                     entries.Add(new { key = keyDesc, original = descVal, translation = transDesc });
@@ -489,7 +489,7 @@ public class AssemblyResourcesConverter
                                                     if (!string.IsNullOrEmpty(attentionVal))
                                                     {
                                                         var keyAtt = keyBase + "_Attention";
-                                                        var compAtt = keyAtt + "\u0000" + attentionVal;
+                                                        var compAtt = string.Concat(keyAtt, "\u0000", attentionVal);
                                                         var transAtt = string.Empty;
                                                         if (existingLoc.TryGetValue(compAtt, out var prevAtt)) transAtt = prevAtt;
                                                         entries.Add(new { key = keyAtt, original = attentionVal, translation = transAtt });
@@ -554,7 +554,7 @@ public class AssemblyResourcesConverter
                 var k = UnescapeJson(km.Groups["k"].Value);
                 var o = UnescapeJson(om.Groups["o"].Value);
                 var t = tm.Success ? UnescapeJson(tm.Groups["t"].Value) : string.Empty;
-                var composite = k + "\u0000" + o;
+                var composite = string.Concat(k, "\u0000", o);
                 if (!map.ContainsKey(composite)) map[composite] = t;
             }
         }
