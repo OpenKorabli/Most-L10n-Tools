@@ -1,2 +1,2 @@
-# Most-L10n-Hook
-Most中文本地化链接库
+# Most-L10n-Tool
+Most本地化工具，包含本地化Hook与语言文件提取器
