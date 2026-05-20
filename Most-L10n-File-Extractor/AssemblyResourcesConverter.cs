@@ -331,7 +331,7 @@ public class AssemblyResourcesConverter
                 }
 
                 // Load existing translations if file exists
-                var existing = new Dictionary<string, string>();
+                var existing = new Dictionary<int, string>();
                 if (File.Exists(destFile))
                 {
                     try
@@ -347,9 +347,9 @@ public class AssemblyResourcesConverter
                 var outList = new List<object>();
                 foreach (var it in items)
                 {
-                    var composite = string.Concat(it.Key, "\u0000", it.Value);
+                    var hashCode = it.Key.GetHashCode() ^ it.Value.GetHashCode();
                     string translation = string.Empty;
-                    if (existing.TryGetValue(composite, out var oldTrans)) translation = oldTrans;
+                    if (existing.TryGetValue(hashCode, out var oldTrans)) translation = oldTrans;
                     outList.Add(new { key = it.Key, original = it.Value, translation = translation });
                     result.ItemCount++;
                 }
@@ -439,7 +439,7 @@ public class AssemblyResourcesConverter
                                             var entries = new List<object>();
 
                                             var jsonPath = Path.Combine(outDir, "Localizations.xml.json");
-                                            var existingLoc = new Dictionary<string, string>();
+                                            var existingLoc = new Dictionary<int, string>();
                                             if (File.Exists(jsonPath))
                                             {
                                                 try
@@ -467,31 +467,34 @@ public class AssemblyResourcesConverter
                                                 foreach (var loc in locs)
                                                 {
                                                     var nameVal = loc.Attribute("Name")?.Value ?? string.Empty;
-                                                    var descVal = loc.Attribute("Description")?.Value ?? string.Empty;
                                                     // Use Item's Name attribute as key base
                                                     var keyBase = itemName;
 
                                                     var keyName = keyBase + "_Name";
-                                                    var compName = string.Concat(keyName, "\u0000", nameVal);
+                                                    var nameHashCode = keyName.GetHashCode() ^ nameVal.GetHashCode();
                                                     var transName = string.Empty;
-                                                    if (!string.IsNullOrEmpty(nameVal) && existingLoc.TryGetValue(compName, out var prev)) transName = prev;
+                                                    if (!string.IsNullOrEmpty(nameVal) && existingLoc.TryGetValue(nameHashCode, out var prev)) transName = prev;
                                                     entries.Add(new { key = keyName, original = nameVal, translation = transName });
                                                     result.ItemCount++;
 
-                                                    var keyDesc = keyBase + "_Description";
-                                                    var compDesc = string.Concat(keyDesc, "\u0000", descVal);
-                                                    var transDesc = string.Empty;
-                                                    if (!string.IsNullOrEmpty(descVal) && existingLoc.TryGetValue(compDesc, out var prevDesc)) transDesc = prevDesc;
-                                                    entries.Add(new { key = keyDesc, original = descVal, translation = transDesc });
-                                                    result.ItemCount++;
+                                                    var descVal = loc.Attribute("Description")?.Value ?? string.Empty;
+                                                    if (!string.IsNullOrEmpty(descVal))
+                                                    {
+                                                        var keyDesc = keyBase + "_Description";
+                                                        var descHashCode = keyDesc.GetHashCode() ^ descVal.GetHashCode();
+                                                        var transDesc = string.Empty;
+                                                        if (!string.IsNullOrEmpty(descVal) && existingLoc.TryGetValue(descHashCode, out var prevDesc)) transDesc = prevDesc;
+                                                        entries.Add(new { key = keyDesc, original = descVal, translation = transDesc });
+                                                        result.ItemCount++;
+                                                    }
 
                                                     var attentionVal = loc.Attribute("Attention")?.Value;
                                                     if (!string.IsNullOrEmpty(attentionVal))
                                                     {
                                                         var keyAtt = keyBase + "_Attention";
-                                                        var compAtt = string.Concat(keyAtt, "\u0000", attentionVal);
+                                                        var attHashCode = keyAtt.GetHashCode() ^ attentionVal.GetHashCode();
                                                         var transAtt = string.Empty;
-                                                        if (existingLoc.TryGetValue(compAtt, out var prevAtt)) transAtt = prevAtt;
+                                                        if (existingLoc.TryGetValue(attHashCode, out var prevAtt)) transAtt = prevAtt;
                                                         entries.Add(new { key = keyAtt, original = attentionVal, translation = transAtt });
                                                         result.ItemCount++;
                                                     }
@@ -532,31 +535,30 @@ public class AssemblyResourcesConverter
         return result;
     }
 
-    private Dictionary<string, string> ParseExistingJson(string json)
+    private Dictionary<int, string> ParseExistingJson(string json)
     {
-        var map = new Dictionary<string, string>();
+        var map = new Dictionary<int, string>();
         if (string.IsNullOrWhiteSpace(json)) return map;
 
-        // find object blocks
-        var objRegex = new Regex(@"\{(.*?)\}", RegexOptions.Singleline);
-        var keyRegex = new Regex(@"""key""\s*:\s*""(?<k>(?:\\.|[^""])*)""", RegexOptions.Singleline);
-        var origRegex = new Regex(@"""original""\s*:\s*""(?<o>(?:\\.|[^""])*)""", RegexOptions.Singleline);
-        var transRegex = new Regex(@"""translation""\s*:\s*""(?<t>(?:\\.|[^""])*)""", RegexOptions.Singleline);
-
-        foreach (Match m in objRegex.Matches(json))
+        try
         {
-            var block = m.Groups[1].Value;
-            var km = keyRegex.Match(block);
-            var om = origRegex.Match(block);
-            var tm = transRegex.Match(block);
-            if (km.Success && om.Success)
+            var list = JsonConvert.DeserializeObject<List<JObject>>(json);
+            if (list == null) return map;
+
+            foreach (var obj in list)
             {
-                var k = UnescapeJson(km.Groups["k"].Value);
-                var o = UnescapeJson(om.Groups["o"].Value);
-                var t = tm.Success ? UnescapeJson(tm.Groups["t"].Value) : string.Empty;
-                var composite = string.Concat(k, "\u0000", o);
-                if (!map.ContainsKey(composite)) map[composite] = t;
+                var k = obj.Value<string>("key") ?? string.Empty;
+                var o = obj.Value<string>("original") ?? string.Empty;
+                var t = obj.Value<string>("translation") ?? string.Empty;
+                if (string.IsNullOrWhiteSpace(k) || string.IsNullOrWhiteSpace(o) || string.IsNullOrWhiteSpace(t))
+                    continue;
+                var hashCode = k.GetHashCode() ^ o.GetHashCode();
+                if (!map.ContainsKey(hashCode)) map[hashCode] = t;
             }
+        }
+        catch
+        {
+            // ignore parse errors and return empty map
         }
 
         return map;

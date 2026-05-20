@@ -175,38 +175,24 @@ namespace Most.L10n
         }
     }
 
-    [HarmonyPatch(typeof(Most.UI.Handlers.Groups.UpdateHints), "Update")]
-    class Most_UI_Handlers_Groups_UpdateHints_Update_Patch
+    [HarmonyPatch(typeof(Most.Configuration.Model.Item), nameof(Most.Configuration.Model.Item.LocalizedName), MethodType.Getter)]
+    class Most_Configuration_Model_Item_LocalizedName_Getter_Patch
     {
-        static bool Prefix(ref Most.UI.Handlers.Groups.UpdateHints __instance)
+        static bool Prefix(ref Most.Configuration.Model.Item __instance, ref string __result)
         {
-            if (__instance.Configuration != null && __instance.ViewModel != null)
+            Most.Configuration.Model.Localizations localization = __instance.Localization;
+            if (localization == null)
             {
-                bool hasLocalization = HookManager.Language_DisplayName_Name_Map.TryGetValue(Lesta.Application.Language.Current.DisplayName, out string languageName) && Most_Configuration_Model_Localizations_Select.CustomLocalizationMap.ContainsKey(languageName);
-                foreach (Lesta.Control.ViewModel.IImageItem<Most.Modification.Model.Group> imageItem in __instance.ViewModel)
-                {
-                    Most.UI.ViewModel.GroupViewModel groupViewModel = (Most.UI.ViewModel.GroupViewModel)imageItem;
-                    if (groupViewModel != null)
-                    {
-                        Most.Configuration.Model.Item item = __instance.Configuration.Find(groupViewModel.Key);
-                        if (item != null)
-                        {
-                            Most.Configuration.Model.Localizations localization = item.Localization;
-                            if (localization != null)
-                            {
-                                string original = localization.GetLocalizedName(HookManager.FallbackLanguageName);
-                                if (hasLocalization && !string.IsNullOrWhiteSpace(original) && Most_Configuration_Model_Localizations_Select.CustomLocalizationMap[languageName].TryGetValue(original, out string temp))
-                                {
-                                    groupViewModel.Hint = temp;
-                                }
-                                else { groupViewModel.Hint = original; }
-                            }
-                            else { groupViewModel.Hint = null; }
-                        }
-                        else { groupViewModel.Hint = null; }
-                    }
-                }
+                __result = null;
+                return false;
             }
+            string original = localization.GetLocalizedName(HookManager.FallbackLanguageName);
+            bool hasLocalization = HookManager.Language_DisplayName_Name_Map.TryGetValue(Lesta.Application.Language.Current.DisplayName, out string languageName) && Most_Configuration_Model_Localizations_Select.CustomLocalizationMap.ContainsKey(languageName);
+            if (hasLocalization && !string.IsNullOrWhiteSpace(original) && Most_Configuration_Model_Localizations_Select.CustomLocalizationMap[languageName].TryGetValue(original, out string temp))
+            {
+                __result = temp;
+            }
+            else { __result = original; }
             return false;
         }
     }
