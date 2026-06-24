@@ -23,9 +23,12 @@ namespace Most.L10n
 #if zh_CN
         public const string ResourceDictionaryPath = "/Most.L10n.Hook;component/Resources/Korabli.Most.exe/resources/lang.zh-cn.xaml";
         public const string CountryFlagPath = "/Most.L10n.Hook;component/Resources/Lesta.Application.dll/resources/cn.normal.png";
+#elif en_US
+        public const string ResourceDictionaryPath = "/Most.L10n.Hook;component/Resources/Korabli.Most.exe/resources/lang.en-us.xaml";
+        public const string CountryFlagPath = "/Most.L10n.Hook;component/Resources/Lesta.Application.dll/resources/us.normal.png";
 #endif
 
-        public static Dictionary<string, string> Language_DisplayName_Name_Map = new Dictionary<string, string> { { "简体中文", "zh-CN" } };
+        public static Dictionary<string, string> Language_DisplayName_Name_Map = new Dictionary<string, string> { { "简体中文", "zh-CN" }, { "English (US)", "en-US" } };
 
         public static void InitHook()
         {
@@ -36,7 +39,13 @@ namespace Most.L10n
 
             var languages = Lesta.Application.Language.Languages.Take(1).ToList();
             languages.Add(
-                new Lesta.Application.Model.Language("be-BY", "简体中文", new ResourceDictionary
+                new Lesta.Application.Model.Language("be-BY",
+#if zh_CN
+                "简体中文"
+#elif en_US
+                "English (US)"
+#endif
+                , new ResourceDictionary
                 {
                     Source = new Uri(ResourceDictionaryPath, UriKind.Relative)
                 })
@@ -55,7 +64,7 @@ namespace Most.L10n
                         Most_Configuration_Model_Localizations_Select.CustomLocalizationMap.Add(languageName, new Dictionary<string, string>());
                         try
                         {
-                            foreach (JToken translation in (JsonConvert.DeserializeObject(File.ReadAllText($".\\Localization\\localization_{languageName}.json")) as JObject)["translation"].Values<JToken>())
+                            foreach (JToken translation in (JsonConvert.DeserializeObject(File.ReadAllText(AppContext.BaseDirectory + $"\\Localization\\localization_{languageName}.json")) as JObject)["translation"].Values<JToken>())
                             {
                                 try
                                 {

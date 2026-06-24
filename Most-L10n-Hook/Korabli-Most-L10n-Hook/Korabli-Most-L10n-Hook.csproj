@@ -30,6 +30,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release_en_US|AnyCPU'">
+    <OutputPath>bin\Release_en_US\</OutputPath>
+    <DefineConstants>TRACE;en_US</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony, Version=2.4.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Lib.Harmony.2.4.2\lib\net48\0Harmony.dll</HintPath>
@@ -84,6 +93,8 @@
     <None Include="packages.config" />
     <Resource Include="Resources\Most.UI.dll\resources\fonts\MiSans-Bold.otf" />
     <Resource Include="Resources\Most.UI.dll\resources\fonts\MiSans-Regular.otf" />
+    <Resource Include="Resources\Korabli.Most.exe\lang_en_US" />
+    <Resource Include="Resources\Lesta.Application.dll\en_US_NormalUri" />
     <None Include="Resources\Most.UI.dll\resources\settings\cn.active.png" />
     <Resource Include="Resources\Korabli.Most.exe\lang_zh_CN" />
     <Resource Include="Resources\Korabli.Most.exe\resources\lang.zh-cn.xaml">
@@ -101,9 +112,45 @@
     <Analyzer Include="Reference\Newtonsoft.Json.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Most.UI.dll\resources\fonts\korabli.xaml">
+    <Resource Include="Resources\Most.UI.dll\resources\lang.en-us.xaml">
+      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Resource>
+    <Resource Include="Resources\Most.UI.dll\resources\settings\lang.en-us.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Resource>
+    <Resource Include="Resources\Most.UI.dll\resources\fonts\korabli.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Resource>
+    <Resource Include="Resources\Most.Patch.dll\resources\lang.en-us.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Resource>
+    <Resource Include="Resources\Most.Modification.dll\resources\lang.en-us.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Resource>
+    <Resource Include="Resources\Most.Game.dll\resources\lang.en-us.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Resource>
+    <Resource Include="Resources\Most.Engine.dll\resources\lang.en-us.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Resource>
+    <Resource Include="Resources\Most.Configuration.dll\resources\lang.en-us.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Resource>
+    <Resource Include="Resources\Most.CAT.dll\resources\lang.en-us.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Resource>
+    <Resource Include="Resources\Most.Background.dll\resources\lang.en-us.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Resource>
     <Resource Include="Resources\Lesta.Application.dll\resources\lang.zh-cn.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -117,22 +164,30 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Resource>
+    <Resource Include="Resources\Korabli.Most.exe\resources\lang.en-us.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Resource>
+    <Resource Include="Resources\Lesta.Application.dll\resources\lang.en-us.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Resource>
+    <Resource Include="Resources\Lesta.Control.dll\resources\lang.en-us.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Resource>
+    <Resource Include="Resources\Lesta.dll\resources\lang.en-us.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Resource>
     <Page Include="Resources\Lesta.dll\resources\lang.zh-cn.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <None Include="Resources\Most.Background.dll\resources\lang.en-gb.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </None>
     <Resource Include="Resources\Most.Background.dll\resources\lang.zh-cn.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Resource>
-    <None Include="Resources\Most.CAT.dll\resources\lang.en-gb.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </None>
     <Resource Include="Resources\Most.CAT.dll\resources\lang.zh-cn.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -145,10 +200,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Resource>
-    <None Include="Resources\Most.Game.dll\resources\lang.en-gb.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </None>
     <Resource Include="Resources\Most.Game.dll\resources\lang.zh-cn.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -174,6 +225,18 @@
     <Resource Include="Resources\Lesta.Application.dll\resources\cn.normal.png" />
     <Resource Include="Resources\Most.UI.dll\Most.UI.Resources.Settings.welcome_CN.html" />
     <Resource Include="Resources\Most.UI.dll\resources\settings\cn.normal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Lesta.Application.dll\resources\us.normal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Most.UI.dll\resources\settings\us.active.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Most.UI.dll\resources\settings\us.normal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Most.UI.dll\Most.UI.Resources.Settings.welcome_US.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

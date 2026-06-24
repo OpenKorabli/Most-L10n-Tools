@@ -1,6 +1,7 @@
 <Solution>
   <Configurations>
     <BuildType Name="Debug" />
+    <BuildType Name="Release_en_US" />
     <BuildType Name="Release_zh_CN" />
   </Configurations>
   <Project Path="Korabli-Most-L10n-Hook/Korabli-Most-L10n-Hook.csproj" Id="ea8b4b91-5688-4cec-9b56-4908bf6d11ba" />

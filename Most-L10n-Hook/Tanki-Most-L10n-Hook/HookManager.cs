@@ -54,7 +54,7 @@ namespace Most.L10n
                         Most_Configuration_Model_Localizations_Select.CustomLocalizationMap.Add(languageName, new Dictionary<string, string>());
                         try
                         {
-                            foreach (JToken translation in (JsonConvert.DeserializeObject(File.ReadAllText($".\\Localization\\localization_{languageName}.json")) as JObject)["translation"].Values<JToken>())
+                            foreach (JToken translation in (JsonConvert.DeserializeObject(File.ReadAllText(AppContext.BaseDirectory + $"\\Localization\\localization_{languageName}.json")) as JObject)["translation"].Values<JToken>())
                             {
                                 try
                                 {
