@@ -28,7 +28,7 @@ namespace Most.L10n
         public const string CountryFlagPath = "/Most.L10n.Hook;component/Resources/Lesta.Application.dll/resources/us.normal.png";
 #endif
 
-        public static Dictionary<string, string> Language_DisplayName_Name_Map = new Dictionary<string, string> { { "简体中文", "zh-CN" }, { "English (US)", "en-US" } };
+        public static Dictionary<string, string> Language_DisplayName_Name_Map = new Dictionary<string, string> { { "简体中文", "zh-CN" }, { "English", "en-US" } };
 
         public static void InitHook()
         {
@@ -43,7 +43,7 @@ namespace Most.L10n
 #if zh_CN
                 "简体中文"
 #elif en_US
-                "English (US)"
+                "English"
 #endif
                 , new ResourceDictionary
                 {
